@@ -1,0 +1,50 @@
+language: php
+php:
+- 7.0
+- 7.1
+- 7.2
+sudo: false
+services:
+- mysql
+env:
+  matrix:
+  - SHOPWARE_VERSION="5.5"
+  global:
+  - PLUGIN_NAME=FfuenfNoWishlist
+  - SHOPWARE_DIRECTORY="${HOME}/shopware"
+  - PLUGIN_DIRECTORY="${SHOPWARE_DIRECTORY}/custom/plugins"
+cache:
+  directories:
+  - "${HOME}/.composer/cache/files"
+install:
+- composer install
+before_script:
+- mysql -e 'CREATE DATABASE shopware;'
+- if [[ "$(php --version | grep -cim1 xdebug)" -ge 1 ]]; then phpenv config-rm xdebug.ini;
+  fi
+- git clone https://github.com/shopware/shopware.git ${SHOPWARE_DIRECTORY} --branch
+  ${SHOPWARE_VERSION}
+- ant -f ${SHOPWARE_DIRECTORY}/build/build.xml -Dapp.host=localhost -Ddb.user=travis
+  -Ddb.host=127.0.0.1 -Ddb.name=shopware build-unit
+- mv ${TRAVIS_BUILD_DIR} ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
+- php ${HOME}/shopware/bin/console sw:plugin:refresh
+- php ${HOME}/shopware/bin/console sw:plugin:install ${PLUGIN_NAME}
+- php ${HOME}/shopware/bin/console sw:plugin:activate ${PLUGIN_NAME}
+- cd ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
+script:
+- composer test
+- composer test-unit
+after_success:
+- "./build.sh $TRAVIS_TAG"
+deploy:
+  skip_cleanup: true
+  provider: releases
+  file_glob: true
+  file: FfuenfNoWishlist*.zip
+  on:
+    tags: true
+  api_key:
+    secure: hwmygZQ2/2w/6rUjPAOtquOi0tQMU57b1oGoGQlFV63hHyGY40A5YhE9F81kKxZijs//1EBPbnQvlRc2d/kiDDy50P7eIsijaBVG2tZfPVFR/dQIzc6AGsN1dr78ojn9Ra9CT1jJeFd5O5eyGUAsWwqEY0YIO6afvxh0VuBgivUtRGQOFt0WYpAqPwms3mvfN8jfLW+j8fvfJxMpD84TJJxwLKpSEVYVeYtHlhJ8VO9ol52aJFdkWEZgOtOweogPEFlZiv+lU+lAKyLnqhzZ1Cc6rMrN3d1o3A05CnmY3jter5eVPU9R7rpU7e06VsUXRkHrLPWF3DfHEnCwAS7EFszxeBC4ilKkgbK+7De7boh27kA03JNkBse6wXqNwztBKi70PtJg/z0kexuAjVftMHC8xpqKZlD9sVRiJoZ3R3gSa8LLz+w6PBFQeGFvF4LLbfaS21ftDb6feG7Xt2Mv2Jpt7VFdLAvZ7rEiyQ8JX+OiKwFiyr+7S657kKckFYq4Wupnr0fdNQtQX9FZPfp8eHe5GJQrwgHuVMqt15Q9QII/1mDxzCpk5AHD040BJ3NnCzfDzbdIuJ5HBc0C4FHu0399hdNBFLC1BQ+0dwprFvGLwmzXgaQNh2LdT0YNNTl3FsSi2UtK/Aazv32GOT33IorA+T+J65EYA0mslG16mSc=
+notifications:
+  slack:
+    secure: betb66P2GozOcN1XxreP5/d6GWNGGrbrPIZPhTdauyfiNlzdxKyiS9mmYtjz7qx5riR6B3jhS8tLNUuusIlvAcLFzoD5Ea4I8zlKLNe619y/3G6/nT0qFa8ftYhl6JXULBGz17He9WSqRuiF/otePPkfv3fyAiW3PaxXIJpszYKQ7yRCD6jy8pdTa55AKNQSaczijXRofZDcg3uq2NQoG6wIGmgTKQdIXxZlvBom1ZXSsflh+q/BytDV7ejr1KN6tYRw5OK5lvxYaBBW29c4OEcxvRfPod4majUmqkxJ5LQyZMmaadFsYLpoqrS5SLFsIVl4gySVsRdj4UhFhC7oNgOT+Mwp2uw+J+NKeYf/TU4YOjKdEskziRfDo7JsL2Q3fma2JfvefHB7rOy5xe1lO+SlZo0Wp4LXACUN+u4HD80MM1msyzzsRY4NSs1DaWrw0hQJISUQpQJtFoXltcyHe2Jk3jMZxJpZV2Oh4x/nOkSrdXMjkRI95m7NEtnKRU9PcdNxvRxGALDIDcm/IicQHdbwQJ9kJQ3BrHr7dhFbVGL31dzK8Am6Ngq8/GuVxpSzQ/VjHBQhUsi1kWP2J/SJXJywQ3IweOwBgbqdt21Rt2UwpJbqgcW35+yUnVdwoJBV96T1gPcqQIV35LoWaEqBGhgZFUvJCL3JmTaEclMACnM=
