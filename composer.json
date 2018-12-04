@@ -8,7 +8,7 @@
     "installer-name": "FfuenfNoWishlist"
   },
   "require": {
-    "php": ">=7.0",
+    "php": ">=7.0"
   },
   "scripts": {
     "test": "phpunit -c tests/ --colors=always",
