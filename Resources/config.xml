@@ -3,6 +3,12 @@
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.5/engine/Shopware/Components/Plugin/schema/config.xsd">
     <elements>
         <element required="true" type="boolean" scope="locale">
+            <name>debug</name>
+            <label lang="de">debug logging aktiviert</label>
+            <label lang="en">debug logging enabled</label>
+            <value>0</value>
+        </element>
+        <element required="true" type="boolean" scope="locale">
             <name>disableWishlist</name>
             <label lang="de">deaktiviere Wunschzettel</label>
             <label lang="en">deactivate wishlist</label>

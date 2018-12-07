@@ -14,9 +14,9 @@ namespace FfuenfNoWishlist\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Plugin\ConfigReader;
-use Shopware\Models\Shop\Shop;
+use FfuenfNoWishlist\Service\AbstractService;
 
-class TemplateRegistration extends ConfigAbstract implements SubscriberInterface
+class TemplateRegistration extends AbstractService implements SubscriberInterface
 {
     /**
      * @var string
