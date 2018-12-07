@@ -39,10 +39,8 @@ abstract class AbstractService
     public function __construct($pluginName, \FfuenfNoWishlist\Service\Logger $logger)
     {
         $this->pluginName = $pluginName;
-        $this->config     = $this->getConfig($shop);
+        $this->config     = $this->getConfig();
         $this->logger     = $this->config['debug'] ? $logger : NULL;
-        $this->config     = $this->getConfig($shop);
-        $this->shop       = $shop;
     }
 
     /**
