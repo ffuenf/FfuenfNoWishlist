@@ -14,48 +14,42 @@ namespace FfuenfNoWishlist\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
 use Shopware\Components\Plugin\ConfigReader;
-use Shopware\Models\Shop\Shop;
+use \FfuenfNoWishlist\Service\AbstractService;
 
-class TemplateRegistration extends ConfigAbstract implements SubscriberInterface
+class TemplateRegistration extends AbstractService implements SubscriberInterface
 {
     /**
      * @var string
      */
-    private $pluginName;
+    protected $pluginName;
 
     /**
      * @var string
      */
-    private $pluginDirectory;
+    protected $pluginDirectory;
 
     /**
      * @var \Enlight_Template_Manager
      */
-    private $templateManager;
+    protected $templateManager;
 
     /**
-     * @var CachedConfigReader
+     * @var ConfigReader
      */
-    private $configService;
-
-    /**
-     * @var Shop
-     */
-    private $shopService;
+    protected $configService;
 
     /**
      * @var \Shopware_Components_Config
      */
-    private $config;
+    protected $config;
 
     public function __construct(string $pluginName, $pluginDirectory, \Enlight_Template_Manager $templateManager, ConfigReader $configService)
     {
-        $this->shop            = Shopware()->Shop();
         $this->pluginName      = $pluginName;
         $this->pluginDirectory = $pluginDirectory;
         $this->templateManager = $templateManager;
         $this->configService   = $configService;
-        $this->config          = $this->configService->getByPluginName($this->pluginName, $this->shop);
+        $this->config          = $this->configService->getByPluginName($this->pluginName);
     }
 
     public static function getSubscribedEvents()

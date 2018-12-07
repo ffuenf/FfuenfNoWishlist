@@ -8,10 +8,24 @@
     "installer-name": "FfuenfNoWishlist"
   },
   "require": {
-    "php": ">=7.0"
+        "php" : "^7.0",
+        "composer/installers": "~1.0"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "^4.3",
+        "friendsofphp/php-cs-fixer": "^2.10",
+        "roave/security-advisories": "dev-master"
+    },
+    "config": {
+        "bin-dir": "bin"
   },
   "scripts": {
-    "test": "phpunit -c tests/ --colors=always",
-    "test-unit": "phpunit -c tests/phpunit_unit.xml --colors=always"
+        "test": "phpunit",
+        "test-spec": "phpspec run --format dot",
+        "cs-check": "php-cs-fixer fix --dry-run --allow-risky=yes -v",
+        "cs-fix": "php-cs-fixer fix --allow-risky=yes -v",
+        "preCommit": "curl -sS https://gist.githubusercontent.com/arosenhagen/4bb9c642527f4f1bad9f21738d08e2f8/raw/2a4ac87dee5d78c5a0f954d741fd27ac880d3eae/pre-commit.sh > .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit",
+        "post-install-cmd": "@preCommit",
+        "post-update-cmd": "@preCommit"
   }
 }
