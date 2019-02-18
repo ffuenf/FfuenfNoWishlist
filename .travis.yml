@@ -37,7 +37,6 @@ before_script:
 - php ${HOME}/shopware/bin/console sw:plugin:activate ${PLUGIN_NAME}
 - cd ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
 script:
-- composer test
 - composer test-unit
 - composer test-spec
 after_success:
