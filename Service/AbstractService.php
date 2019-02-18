@@ -6,25 +6,37 @@
  * @category   Shopware
  * @package    Shopware\Plugins\FfuenfNoWishlist
  * @author     Achim Rosenhagen / ffuenf - Pra & Rosenhagen GbR
- * @copyright  Copyright (c) 2018, Achim Rosenhagen / ffuenf - Pra & Rosenhagen GbR (https://www.ffuenf.de)
+ * @copyright  Copyright (c) 2019, Achim Rosenhagen / ffuenf - Pra & Rosenhagen GbR (https://www.ffuenf.de)
  *
  */
 
 namespace FfuenfNoWishlist\Service;
 
-use \FfuenfNoWishlist\Service\Logger;
+use Shopware\Components\Plugin\ConfigReader;
+use Enlight_Template_Manager;
+use \FfuenfCommon\Components\Logger;
 
 abstract class AbstractService
 {
     /**
      * @var string
      */
-    protected $pluginName = NULL;
+    protected $pluginName;
 
     /**
-     * @var \FfuenfNoWishlist\Service\Logger
+     * @var string
      */
-    protected $logger;
+    protected $pluginDirectory;
+
+    /**
+     * @var \Enlight_Template_Manager
+     */
+    protected $templateManager;
+
+    /**
+     * @var ConfigReader
+     */
+    protected $configService;
 
     /**
      * @var Shopware\Container\Config
@@ -32,23 +44,23 @@ abstract class AbstractService
     protected $config;
 
     /**
-     * AbstractService constructor.
-     * @param string $pluginName
-     * @param \FfuenfNoWishlist\Service\Logger $logger
+     * @var FfuenfCommon\Components\Logger
      */
-    public function __construct($pluginName, \FfuenfNoWishlist\Service\Logger $logger)
-    {
-        $this->pluginName = $pluginName;
-        $this->config     = $this->getConfig();
-        $this->logger     = $this->config['debug'] ? $logger : NULL;
-    }
+    protected $logger;
 
     /**
-     * @return array
-     * @throws \Exception
+     * @param string $pluginName
+     * @param string $pluginDirectory
+     * @param Enlight_Template_Manager $templateManager
+     * @param ConfigReader $configService
      */
-    public function getConfig()
+    public function __construct(string $pluginName, string $pluginDirectory, Enlight_Template_Manager $templateManager, ConfigReader $configService)
     {
-        return Shopware()->Container()->get('shopware.plugin.config_reader')->getByPluginName($this->pluginName);
+        $this->pluginName      = $pluginName;
+        $this->pluginDirectory = $pluginDirectory;
+        $this->templateManager = $templateManager;
+        $this->configService   = $configService;
+        $this->config          = $this->container->get('shopware.plugin.config_reader')->getByPluginName($this->pluginName);
+        $this->logger          = new Logger();
     }
 }
