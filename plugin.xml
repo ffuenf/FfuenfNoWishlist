@@ -15,7 +15,4 @@
             Erstveröffentlichung
         </changes>
     </changelog>
-    <requiredPlugins>
-        <requiredPlugin pluginName="FfuenfCommon" minVersion="1.0.0"/>
-    </requiredPlugins>
 </plugin>
