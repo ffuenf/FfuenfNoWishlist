@@ -1,11 +1,17 @@
 language: php
+sudo: false
+cache:
+  apt: true
+  directories:
+  - "$HOME/.composer/cache"
+  - "$HOME/.cache/bin"
 php:
 - 7.0
 - 7.1
 - 7.2
-sudo: false
-services:
-- mysql
+- 7.3
+matrix:
+  fast_finish: true
 env:
   matrix:
   - SHOPWARE_VERSION="5.5"
@@ -13,37 +19,27 @@ env:
   - PLUGIN_NAME=FfuenfNoWishlist
   - SHOPWARE_DIRECTORY="${HOME}/shopware"
   - PLUGIN_DIRECTORY="${SHOPWARE_DIRECTORY}/custom/plugins"
-cache:
-  directories:
-  - "${HOME}/.composer/cache/files"
-install:
-- composer install
-before_script:
-- if [[ "$(php --version | grep -cim1 xdebug)" -ge 1 ]]; then phpenv config-rm xdebug.ini;
-  fi
-- git clone https://github.com/shopware/shopware.git ${SHOPWARE_DIRECTORY} --branch
-  ${SHOPWARE_VERSION}
-- ant -f ${SHOPWARE_DIRECTORY}/build/build.xml -Dapp.host=localhost -Ddb.user=travis
-  -Ddb.host=127.0.0.1 -Ddb.name=shopware build-unit
-- mv ${TRAVIS_BUILD_DIR} ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
-- php ${HOME}/shopware/bin/console sw:plugin:refresh
-- php ${HOME}/shopware/bin/console sw:plugin:install ${PLUGIN_NAME}
-- php ${HOME}/shopware/bin/console sw:plugin:activate ${PLUGIN_NAME}
-- cd ${PLUGIN_DIRECTORY}/${PLUGIN_NAME}
+before_install:
+- curl -sSL https://raw.githubusercontent.com/ffuenf/SWTestStand/master/before_install.sh
+  | bash
 script:
-- composer test
-- composer test-spec
+- curl -sSL https://raw.githubusercontent.com/ffuenf/SWTestStand/master/script.sh
+  | bash
 after_success:
-- "./build.sh $TRAVIS_TAG"
+- curl -sSL https://raw.githubusercontent.com/ffuenf/SWTestStand/master/build.sh ${PLUGIN_NAME}
+  ${TRAVIS_TAG} | bash
 deploy:
-  skip_cleanup: true
   provider: releases
+  file:
+  - "${PLUGIN_NAME}-${TRAVIS_TAG}.zip"
+  - "${PLUGIN_NAME}-${TRAVIS_TAG}.tar.gz"
+  skip_cleanup: true
   file_glob: true
-  file: "${PLUGIN_NAME}*.zip"
   on:
+    branch: master
     tags: true
   api_key:
-    secure: PeZuB5cyoqF/yhWsRSQyLxddW/rs/AsDWEturG9pLobKbvesOSzcoYfrzwSzcTcYITu+lkGZPohTAyavlRujpqCDRFLnZJIamh1DTMbE6d2bFlMRzjymX9SAxgUq7Kf6CWD6WyFNRcFdhTlE1XHt+057CMEyeZt3GyV6nPmuu24ccAuLKpBJu9Qq37oIRImptfbi6F/ccJyF5E5p46YYCXv8YJzSE4+FHQ1fWfwdReds/IaFwrpuvHsKODszm7bYDDMNPDc7yLlmKRO9isAnBa/NZFZsPSu0C8Smvr63nWrj8+lP3KOM5iZvV33x6gzqDOFmbyzQVE1W/5Fv30q2NpHm5bTKDekLs3J6rtqK7C3PcLYvcrfDoh9w+dOJYLTQe33ptKv3aVb0DKy8SZTc0EqZ2aN/9GSgEDo+RtbpPJ1804ytD+uqjLxBb3NeV6uAzRWS5LuAihH/voPGZnCVp9vPAtPo9NnAlKZwTQsfPAYb7wFmjQv9/dFLmhE+YIzneRfpQKrIT5zKjYZ7PUawj8UHDoLan1boCxb6/oB63ywSLqiXI8GDwzLb7AZMBjDivmo6GhIKopKYX55CQzRXHbMDnD86aDWf/ijeWVuKjA9QHhTYlDQeeeEZjJKC4Y1JB4jvOaH1U+jbS2ARjTh98Rs2LJWSyRAQV4puVohK4Og=
+    secure: C0QG5aB+EuD4ykmpvoJRGwGiakR1v/UWzRDwq+U5QVbO8zqUH7ZPqIGUUxcmD1q4prmHNBZ9jUmHmFdE0E8nUyWAUtmo0WYiU02FlBWeIHD/itJIz2xOXCOwsCGvTRbH7RghPk33ypqZuqddfZw8H9AUiko3fRm3PDVE1SmJniZO//iLMaDiF7jy0ReKwUVCH2xC8ZHLZvOwrS4Y8PVZPQtzL5gY3Mu+bWqn6zjuaQCLeZ/FCzac6NH8cZqAFGYOLOm8/bWoNQ4hnu9dwQQnzhavdn7dM8XddRQ2Qx1S9XzBVgjqBU9ONqxSNiWDyARegpFl1q648G0w7vPj7NHbCXnRZlkY7OFUNwK2Bhr+g1vNJz+25p4pyptWSBAnJH01oNbmUKcM1h+IgjpXNx4gIHCMP1rvyoV020TMgTpQkp7yoStbMh8kfVSUXydZBO+c95hg8D6f+pBfz800wE59AjfvZVKwEWCyyFcZoVJ1VK4wW9aYHvfqMO78/v1DywGeOHqgZqG5fbg+luFDNNj2vSNJAEnfV+EX/4UyvUO7c5Oogn3TWoA6Ee4ptEN6bBHRB44B4blbumKooCJxGz119BZC3yCmkhUwc8EEb5OgPZjfzY5XvLZ/Nz5GdHjWQwOdofGzwKOPDXL3B6rfkh07EZnZUG4ukmkC0TPdnpfpAGA=
 notifications:
   slack:
-    secure: FiS/1E2j84HWx551K9I0fOzlH3sk6/8FXG9yfIr2AKc2z0w9gH58Z6mGyTRtlmsjztLkaVytYWsGuMWvpuEyjPSPVfcqnOd6f387yh3QUvdjs99rh+pgInnP8SIuj9EkV5S9Nr1tWERyoPjC/zpCEe4+6Cq0N48kxCerp/xwdhxUTXBfInhq6hrqGkSSg3Iy2qDKGDUIUrFPW06xgPmrFX6zOVV10IaY3kjnGoYtTyJmEF+3j9tfniSrXF+HU27jVxgEPcr6Nd1P8/jKIwhSfjvIuhKvrZyxitRVblBNkgafQOxc1/uuxkE6qpayEUI6tftzyHymI8EhzprCtD7pp3qd/7l6gFEAyieZXAaSUoyDqX+nTo6uDcmCiVUlzlYz9pFIoSiYX0YP9EnGp5mlVQ0lvHlkLOf3Dlb3wX9t1f56U7jmPPtApKbhzhJIZugajhABKTvUVi3LFW0cfmhRdzWYg2UA/h+h7x+bRSGdeJXk8PN37IgVaEncKB8yWYIFakz6xCp2mnP+0cGlPSsYnlHUy/7HU+UG6LAQl/Gu2cczYCnFI0B9ERNKJS9CrtUB72WmeRl8HfsxJVEhJpEKfLM3z9Jmr2cqHNxEZs0GCMGCl7ZIEzP6HemvZ+2uw9GEDnm+58lnYsQcsYZRW9T7yk1DflRrJedE8y+WbJPbzyw=
+    secure: WPVenB5G9OoBHo40twRjzrpIWH3BVhxzfKJoPYubm/6ts0ThzF8hjZsXziJiDBGSPAIFcKmRb184fQ/duSqDHvzupUwlDI6tUYe68TCIcCg6h7gMH5oBWBj7oO+0z9r7jppEGBIUo53WzjHvsUOnf2s7EsDZU0QB75AmapUei8YQROFO1MIunDhL50XrGPj819/rdMBpHy4rDR+gA4+Lr5Z+IvnkXuQu/WkKs79RXWWgifvaY5ML1Nj293qT+4SWHKUz6J+Z+9VEmUxsrdgUukoxnGTAMIJ4RKoWNwahNUZ4wvc5TMGTbySSEktDrTNvv5rflb9RzAdLmOULq3ip/LNTNFZfAlu0LGMO06ku+tT58pnEcIlPtx0y67VRsXilHohE7pPlFGr4pPZivsFZD+NfkGrFfcBQpZLOjn9+dVKYpYB7ObVDdr5Ofs2FlcEs1/xL8DekTXJCzSKFahL/X/MdGAorkh6zozBSZJgj8aRNIC83lL6ayVgESjzzrNSmTGIEANKEBNLNKCjTkDL9NMkP4aB4cnt3fmbco8gJHAv4GKoN4ftZbenx41HRconBFH3qm0T8eeW5vN6FXYOo21lmdr4/0C72aR4dOf6STTzxi3R7gHLLZn/lgA2Me/Svy+FoiVAo5Zvc9E/HkjfgvXtIxOflrWT5hzQqpxSlnKM=

@@ -2,6 +2,14 @@
 
 This file is used to list changes made in each version of FfuenfNoWishlist.
 
+## 1.0.3 (February 21, 2019)
+
+* add test-suite ffuenf/SWTestStand
+
+## 1.0.2 (February 14, 2019)
+
+* add dependency to FfuenfCommon
+
 ## 1.0.1 (December 7, 2018)
 
 * move ConfigAbstract to AbstractService

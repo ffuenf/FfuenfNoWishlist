@@ -6,7 +6,7 @@
  * @category   Shopware
  * @package    Shopware\Plugins\FfuenfNoWishlist
  * @author     Achim Rosenhagen / ffuenf - Pra & Rosenhagen GbR
- * @copyright  Copyright (c) 2018, Achim Rosenhagen / ffuenf - Pra & Rosenhagen GbR (https://www.ffuenf.de)
+ * @copyright  Copyright (c) 2019, Achim Rosenhagen / ffuenf - Pra & Rosenhagen GbR (https://www.ffuenf.de)
  *
  */
 
@@ -30,6 +30,7 @@ class FfuenfNoWishlist extends Plugin
     public function build(ContainerBuilder $container)
     {
         $container->setParameter('ffuenf_no_wishlist.plugin_dir', $this->getPath());
+        $container->setParameter('ffuenf_no_wishlist.view_dir', $this->getPath());
         parent::build($container);
     }
 
@@ -46,7 +47,8 @@ class FfuenfNoWishlist extends Plugin
      */
     public function uninstall(UninstallContext $context)
     {
-        $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
+        $context->scheduleClearCache(UninstallContext::CACHE_LIST_ALL);
+        parent::uninstall($context);
     }
 
     /**
@@ -54,7 +56,8 @@ class FfuenfNoWishlist extends Plugin
      */
     public function update(UpdateContext $context)
     {
-        $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
+        $context->scheduleClearCache(UpdateContext::CACHE_LIST_ALL);
+        parent::update($context);
     }
 
     /**
@@ -62,7 +65,8 @@ class FfuenfNoWishlist extends Plugin
      */
     public function activate(ActivateContext $context)
     {
-        $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
+        $context->scheduleClearCache(ActivateContext::CACHE_LIST_ALL);
+        parent::activate($context);
     }
 
     /**
@@ -70,7 +74,8 @@ class FfuenfNoWishlist extends Plugin
      */
     public function deactivate(DeactivateContext $context)
     {
-        $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
+        $context->scheduleClearCache(DeactivateContext::CACHE_LIST_ALL);
+        parent::deactivate($context);
     }
 
     /**
@@ -78,15 +83,17 @@ class FfuenfNoWishlist extends Plugin
      */
     public function enable(EnableContext $context)
     {
-        $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
+        $context->scheduleClearCache(EnableContext::CACHE_LIST_ALL);
+        parent::enable($context);
     }
 
     /**
-     * @param EnableContext $context
+     * @param DisableContext $context
      */
     public function disable(DisableContext $context)
     {
-        $context->scheduleClearCache(InstallContext::CACHE_LIST_ALL);
+        $context->scheduleClearCache(DisableContext::CACHE_LIST_ALL);
+        parent::disable($context);
     }
 
 }
