@@ -30,6 +30,7 @@ class FfuenfNoWishlist extends Plugin
     public function build(ContainerBuilder $container)
     {
         $container->setParameter('ffuenf_no_wishlist.plugin_dir', $this->getPath());
+        $container->setParameter('ffuenf_no_wishlist.view_dir', $this->getPath());
         parent::build($container);
     }
 
