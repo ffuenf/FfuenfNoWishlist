@@ -13,8 +13,7 @@
 namespace FfuenfNoWishlist\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
-use Shopware\Components\Plugin\ConfigReader;
-use \FfuenfNoWishlist\Service\AbstractService;
+use FfuenfCommon\Service\AbstractService;
 
 class TemplateRegistration extends AbstractService implements SubscriberInterface
 {

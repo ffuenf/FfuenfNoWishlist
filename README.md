@@ -4,7 +4,9 @@ FfuenfNoWishlist
 ================
 [![GitHub tag](https://img.shields.io/github/tag/ffuenf/FfuenfNoWishlist.svg)](https://github.com/ffuenf/FfuenfNoWishlist)
 [![Build Status](https://img.shields.io/travis/ffuenf/FfuenfNoWishlist.svg)](https://travis-ci.org/ffuenf/FfuenfNoWishlist)
-[![Code Quality](https://scrutinizer-ci.com/g/ffuenf/FfuenfNoWishlist/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ffuenf/FfuenfNoWishlist/?branch=master)
+[![Code Quality](https://scrutinizer-ci.com/g/ffuenf/FfuenfNoWishlist/badges/quality-score.png)](https://scrutinizer-ci.com/g/ffuenf/FfuenfNoWishlist/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/ffuenf/FfuenfNoWishlist/badges/coverage.png)](https://scrutinizer-ci.com/g/ffuenf/FfuenfNoWishlist)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/ffuenf/FfuenfNoWishlist/badges/code-intelligence.svg)](https://scrutinizer-ci.com/code-intelligence)
 [![PayPal Donate](https://img.shields.io/badge/paypal-donate-blue.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=J2PQS2WLT2Y8W&item_name=Shopware%20Extension%3a%20FfuenfNoWishlist&item_number=FfuenfNoWishlist&currency_code=EUR)
 
 This is a extension for [Shopware](https://de.shopware.com/) that removes the wishlist functionality in the frontend.
@@ -21,10 +23,10 @@ Other versions are assumed to work.
 Requirements
 ------------
 
-|                                                                              | PHP 7.0           | PHP 7.1           | PHP 7.2           |
-| ---------------------------------------------------------------------------- | ----------------- | ----------------- | ----------------- |
-| [EOL](https://secure.php.net/supported-versions.php) / SEC-FIX / STABLE / RC | EOL               | SEC-FIX           | **STABLE**        |
-| automated tests on [travis]                                                  | **required pass** | **required pass** | **required pass** |
+|                                                                              | PHP 7.0           | PHP 7.1           | PHP 7.2           | PHP 7.3           |
+| ---------------------------------------------------------------------------- | ----------------- | ----------------- | ----------------- | ----------------- |
+| [EOL](https://secure.php.net/supported-versions.php) / SEC-FIX / STABLE / RC | EOL               | SEC-FIX           | **STABLE**        | **STABLE**        |
+| automated tests on [travis]                                                  | **required pass** | **required pass** | **required pass** | **required pass** |
 
 Shopware [officially supports PHP 5.6.4 and higher](https://community.shopware.com/Systemanforderungen_detail_1840.html#Server).
 

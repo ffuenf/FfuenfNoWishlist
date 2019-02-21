@@ -4,10 +4,10 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="ffuenf_no_wishlist.subscriber.template_registration" class="FfuenfNoWishlist\Subscriber\TemplateRegistration">
-            <argument>%ffuenf_no_wishlist.plugin_name%</argument>
-            <argument>%ffuenf_no_wishlist.plugin_dir%</argument>
-            <argument type="service" id="template"/>
-            <argument type="service" id="shopware.plugin.cached_config_reader" />
+            <argument type="string">%ffuenf_no_wishlist.plugin_name%</argument>
+            <argument type="string">%ffuenf_no_wishlist.plugin_dir%</argument>
+            <argument type="string">%ffuenf_no_wishlist.view_dir%</argument>
+            <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
         </service>
     </services>
