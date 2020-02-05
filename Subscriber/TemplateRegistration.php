@@ -14,6 +14,7 @@ namespace FfuenfNoWishlist\Subscriber;
 
 use Enlight\Event\SubscriberInterface;
 use FfuenfCommon\Service\AbstractService;
+use Enlight_Event_EventArgs;
 
 class TemplateRegistration extends AbstractService implements SubscriberInterface
 {
@@ -21,14 +22,14 @@ class TemplateRegistration extends AbstractService implements SubscriberInterfac
     public static function getSubscribedEvents()
     {
         return [
-            'Enlight_Controller_Action_PostDispatch' => 'onPostDispatchFrontend'
+            'Enlight_Controller_Action_PostDispatchSecure_Frontend' => 'addTemplateDir'
         ];
     }
 
-    public function onPostDispatchFrontend()
+    public function addTemplateDir(Enlight_Event_EventArgs $args)
     {
-        if ($this->config['disableWishlist']) {
-            $this->templateManager->addTemplateDir($this->pluginDirectory . '/Resources/views');
-        }
+        $controller = $args->getSubject();
+        $view = $controller->View();
+        $this->templateManager->addTemplateDir($this->viewDirectory);
     }
 }
