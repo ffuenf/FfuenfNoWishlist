@@ -18,18 +18,25 @@ use Enlight_Event_EventArgs;
 
 class TemplateRegistration extends AbstractService implements SubscriberInterface
 {
-
+    /**
+     * {@inheritdoc}
+     */
     public static function getSubscribedEvents()
     {
         return [
-            'Enlight_Controller_Action_PostDispatchSecure_Frontend' => 'addTemplateDir'
+            'Theme_Inheritance_Template_Directories_Collected' => 'onTemplateDirectoriesCollect'
         ];
     }
 
-    public function addTemplateDir(Enlight_Event_EventArgs $args)
+    /**
+     * @param \Enlight_Event_EventArgs $args
+     */
+    public function onTemplateDirectoriesCollect(\Enlight_Event_EventArgs $args)
     {
-        $controller = $args->getSubject();
-        $view = $controller->View();
-        $this->templateManager->addTemplateDir($this->viewDirectory);
+        $dirs = $args->getReturn();
+        if ($this->config['disableWishlist'] == 1) {
+            $dirs[] = $this->viewDirectory;
+        }
+        $args->setReturn($dirs);
     }
 }
